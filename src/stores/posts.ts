@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
-import {Post, today, thisWeek, thisMonth, TimelinePost} from '../posts'
-import { Period } from '../constants'
-import { DateTime } from 'luxon'
+import { DateTime } from 'luxon';
+import { defineStore } from 'pinia';
+import { Period } from '../constants/constants';
+import { Post, thisMonth, thisWeek, TimelinePost, today } from '../posts';
 // ref number, string
 // computed
 // reactive {}, Map, Set
@@ -46,6 +46,19 @@ export const usePosts = defineStore('posts', {
 
             this.ids = ids
             this.all = all
+        },
+
+        async createPost (post: TimelinePost) {
+            const body = JSON.stringify({...post, created: post.created.toISO()})
+            console.log(body);
+            
+            return await window.fetch('http://localhost:8000/posts', {
+                method: 'POST',
+                headers: {
+                   "Content-Type": "application/json"
+                },
+                body
+            })
         }
     },
 
